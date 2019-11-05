@@ -5,6 +5,9 @@ spring:
       bootstrap-servers: localhost:9092
       topic-name: topic1
       topic-name2: topic2
+      new-topic-name: new-topic1
+      new-topic-name2: new-topic2
+      new-topic-name3: new-topic3
       producer:
          key-serializer: org.apache.kafka.common.serialization.StringSerializer
          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
