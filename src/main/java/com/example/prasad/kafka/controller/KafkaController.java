@@ -29,12 +29,8 @@ public class KafkaController {
 	@Value("${spring.kafka.topic-name2}")
 	private String topicName2;
 
-	@GetMapping("/send")
-	public String hello() throws Exception {
-		//IntStream.range(0, MESSAGE_COUNT).forEach(index -> this.template.send(topicName, String.valueOf(index),
-				//new PartitionMessage("Prasad: " + index, index)));
-		//IntStream.range(0, MESSAGE_COUNT).forEach(index -> this.template.send(topicName2, String.valueOf(index),
-				//new PartitionMessage("Prasad: " + index, index)));
+	@GetMapping("/send-event")
+	public String sendEvent() throws Exception {
 		IntStream.range(0, MESSAGE_COUNT).forEach(index -> this.template.send(topicName, String.valueOf(index),
 				new PartitionMessage("Prasad: ", 0)));
 		IntStream.range(0, MESSAGE_COUNT).forEach(index -> this.template.send(topicName2, String.valueOf(index),
@@ -44,30 +40,30 @@ public class KafkaController {
 
 	@KafkaListener(topics = {"${spring.kafka.topic-name}","${spring.kafka.topic-name2}"}, clientIdPrefix = "json", containerFactory = "kafkaListenerContainerFactory")
 	public void listenAsObject(ConsumerRecord<String, PartitionMessage> cr, @Payload PartitionMessage payload) {
-		System.out.println("1 [JSON] received Key {" + cr.key() + "}: " + payload);
-											//+ "Type [{" + typeIdHeader(cr.headers()) + "}] | "
-											//+ "Payload: {" + payload + "} ");
-											//+ "Record: {" + cr.toString() + "}");
+		System.out.println("1 [JSON] received Key {" + cr.key() + "}: "
+											+ "Type [{" + typeIdHeader(cr.headers()) + "}] | "
+											+ "Payload: {" + payload + "} "
+											+ "Record: {" + cr.toString() + "}");
 	}
 
 	@KafkaListener(topics = {"${spring.kafka.topic-name}","${spring.kafka.topic-name2}"}, clientIdPrefix = "string", containerFactory = "kafkaListenerStringContainerFactory")
 	public void listenasString(ConsumerRecord<String, String> cr, @Payload String payload) {
-		System.out.println("2 [String] received Key {" + cr.key() + "}: " + payload);
-												//+ "Type [{" + typeIdHeader(cr.headers())+ "}] | "
-												//+ "Payload: {" + payload + "} ");
-												//+ "Record: {" + cr.toString() + "}");
+		System.out.println("2 [String] received Key {" + cr.key() + "}: "
+												+ "Type [{" + typeIdHeader(cr.headers())+ "}] | "
+												+ "Payload: {" + payload + "} "
+												+ "Record: {" + cr.toString() + "}");
 	}
 
 	@KafkaListener(topics = {"${spring.kafka.topic-name}","${spring.kafka.topic-name2}"}, clientIdPrefix = "bytearray", containerFactory = "kafkaListenerByteArrayContainerFactory")
 	public void listenAsByteArray(ConsumerRecord<String, byte[]> cr, @Payload byte[] payload) {
-		System.out.println("3 [ByteArray] received Key {" + cr.key() + "}: " + payload);
-												//+ "Type [{" + typeIdHeader(cr.headers())+ "}] | "
-												//+ "Payload: {" + payload + "} } ");
-												//+ "Record: {" + cr.toString() + "}");
+		System.out.println("3 [ByteArray] received Key {" + cr.key() + "}: "
+												+ "Type [{" + typeIdHeader(cr.headers())+ "}] | "
+												+ "Payload: {" + payload + "} } "
+												+ "Record: {" + cr.toString() + "}");
 	}
 
-	//private static String typeIdHeader(Headers headers) {
-		//return StreamSupport.stream(headers.spliterator(), false).filter(header -> header.key().equals("__TypeId__"))
-				//.findFirst().map(header -> new String(header.value())).orElse("N/A");
-	//}
+	private static String typeIdHeader(Headers headers) {
+		return StreamSupport.stream(headers.spliterator(), false).filter(header -> header.key().equals("__TypeId__"))
+				.findFirst().map(header -> new String(header.value())).orElse("N/A");
+	}
 }
