@@ -5,13 +5,17 @@ spring:
       bootstrap-servers: localhost:9000
       topic-name: topic1
       topic-name2: topic2
+      topic-name3: topic3
+      topic-name4: topic4
+      topic-name5: topic5
+      topic-name6: topic6
       producer:
          key-serializer: org.apache.kafka.common.serialization.StringSerializer
          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       consumer:
-         group-id: group
-         group-id1: group1
+         group-id: group1
          group-id2: group2
+         group-id3: group3
          auto-offset-reset: earliest
          key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
          value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

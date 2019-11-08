@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.ContainerProperties.AckMode;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 @Configuration
@@ -47,6 +48,23 @@ public class KafkaConsumerConfig {
 		ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory2());
 
+		return factory;
+	}
+	
+	@Bean
+	public ConsumerFactory<String, Object> consumerFactory3() {
+		final JsonDeserializer<Object> jsonDeserializer = new JsonDeserializer<>();
+		jsonDeserializer.addTrustedPackages("*");
+		Map<String, Object> props = kafkaProperties.buildConsumerProperties();
+		props.put(org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+		return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), jsonDeserializer);
+	}
+
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory3() {
+		ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory3());
+		factory.getContainerProperties().setAckMode(AckMode.MANUAL_IMMEDIATE);
 		return factory;
 	}
 

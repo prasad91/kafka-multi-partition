@@ -18,7 +18,7 @@ public class KafkaController2 {
 
 	private static int index = 0;
 
-	@Value("${spring.kafka.topic-name}")
+	@Value("${spring.kafka.topic-name3}")
 	private String topicName;
 
 	@GetMapping("/send-event-parent")
@@ -68,7 +68,7 @@ public class KafkaController2 {
 		return "Messages Sent!!\n";
 	}
 
-	@KafkaListener(topics = { "${spring.kafka.topic-name}" }, containerFactory = "kafkaListenerContainerFactory")
+	@KafkaListener(topics = { "${spring.kafka.topic-name3}" }, containerFactory = "kafkaListenerContainerFactory")
 	public void listenTopic1(ConsumerRecord<String, Object> cr, @Payload Object payload) {
 		System.out.println("1 [JSON] received Key {" + cr.key() + "}: " + payload);
 	}

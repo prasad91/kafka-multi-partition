@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.prasad.kafka.domain.Event;
-
 @RestController
 public class KafkaController3 {
 
@@ -20,7 +18,7 @@ public class KafkaController3 {
 
 	private static int index = 0;
 
-	@Value("${spring.kafka.topic-name2}")
+	@Value("${spring.kafka.topic-name4}")
 	private String topicName2;
 
 	@GetMapping("/send-event-multi-group")
@@ -48,13 +46,13 @@ public class KafkaController3 {
 		return "Messages Sent!!\n";
 	}
 
-	@KafkaListener(topics = { "${spring.kafka.topic-name2}" }, groupId = "${spring.kafka.group-id1}", containerFactory = "kafkaListenerContainerFactory")
-	public void listenTopicGroup1(ConsumerRecord<String, Event> cr, @Payload Event payload) {
+	@KafkaListener(topics = { "${spring.kafka.topic-name4}" }, groupId = "${spring.kafka.consumer.group-id2}", containerFactory = "kafkaListenerContainerFactory")
+	public void listenTopicGroup1(ConsumerRecord<String, Object> cr, @Payload Object payload) {
 		System.out.println("[GROUP1] received Key {" + cr.key() + "}: " + payload);
 	}
 	
-	@KafkaListener(topics = { "${spring.kafka.topic-name2}" }, groupId = "${spring.kafka.group-id2}", containerFactory = "kafkaListenerContainerFactory2")
-	public void listenTopicGroup2(ConsumerRecord<String, Event> cr, @Payload Event payload) {
+	@KafkaListener(topics = { "${spring.kafka.topic-name4}" }, groupId = "${spring.kafka.consumer.group-id3}", containerFactory = "kafkaListenerContainerFactory2")
+	public void listenTopicGroup2(ConsumerRecord<String, Object> cr, @Payload Object payload) {
 		System.out.println("[GROUP2] received Key {" + cr.key() + "}: " + payload);
 	}
 
